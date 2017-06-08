@@ -25,7 +25,17 @@ html {
 }
 
 /* (OPTIONNEL) Pour mettre en évidence la case sous le curseur je met un effet au passage de la souris */
-
 .case:hover{
-	border-color: #FF0;
+	border-color: #FFF;
 }
+
+
+/* les classes joueur1 et joueur2 permettent de visualiser quel joueur a jouer dans la case */
+#jeu .joueur1 {
+	background-color: #f00;
+}
+
+#jeu .joueur2 {
+	background-color: #0f0;
+}
+
