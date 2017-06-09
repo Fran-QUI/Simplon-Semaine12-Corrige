@@ -1,6 +1,15 @@
-//////////////////
-//les variables //
-//////////////////
+///////////////////
+// les variables //
+///////////////////
+
+/*Variable du DOM - Zone de jeu*/
+
+var $zoneDeJeu = document.getElementById("jeu");
+
+
+/*Variable du DOM - Bouton "Recommencer"*/
+
+var $btnRestart = document.getElementById("btnRestart")
 
 /*Variables du DOM - Les Cases*/
 
@@ -16,57 +25,144 @@ var $casel3c1 = document.getElementById("l3c1");
 var $casel3c2 = document.getElementById("l3c2");
 var $casel3c3 = document.getElementById("l3c3");
 
-/*Variable du DOM - Zone de jeu*/
-
-var $zoneDeJeu = document.getElementById("jeu");
+// Je stocke les cases dans un tableau pour pouvoir toutes les cibler d'un coup au moment de l'initialisation de la zone de jeu
+var toutesLesCases = [	$casel1c1, $casel1c2, $casel1c3,
+						$casel2c1, $casel2c2, $casel2c3,
+						$casel3c1, $casel3c2, $casel3c3,	];
 
 /*Autre Variables*/
 
 var tourDuJoueur; //pour suivre le tour du joueur 1 ou 2 comme valeur numérique possible
+var nombreDeCoups; //pour suivre les tours de l'ensemble des joueurs, valeur numérique de 0 à 9 (il y a 9 cases)
 
 /////////////////////////////////
 //   Les Fonctions du jeu      //
 /////////////////////////////////
 
 
-// initialise la partie
-function initialisationDeLaPartie(tourDuJoueur){
+//DEBUT--initialise la partie--
+function initialisationDeLaPartie(){
 	
-	//Définit le premier joueur en tour de joueur
-	tourDuJoueur = 1; 
-	
-	// optionnel : tire un joueur au hasard
-	// tourDuJoueur = Math.floor(2*Math.random()+1);
+	tourDuJoueur = 1; //Définit le joueur 1 comme premier joueur
+
+	//+ optionnel : tire un joueur au hasard
+	//+ tourDuJoueur = Math.floor(2*Math.random()+1);
+
+	nombreDeCoups = 0; //Initialise le nombre de coups joués
+
+	//parcour chaque case et supprime les class "joueur1" et "joueur2"
+	for( i = 0 ; i < toutesLesCases.length ; i++ ) {
+		toutesLesCases[i].classList.remove("joueur1", "joueur2")
+	};
 
 };
+//FIN--initialise la partie--
 
-
-// Cocher une case
-
-function cocherUneCase(laCaseCochee) {
+//DEBUT--Cocher une case--
+function cocherUneCase(event) {
 	
-	// on teste si un joueur a déjà joué dans la case (si c'est le cas il y a une classe en plus "joueur1" ou "joueur2")
-	if (laCaseCochee.target.classList == "case") {
-		
-		//on teste le tour du joueur, on ajoute la classe en fonction ou on alerte les joueurs
-		switch(tourDuJoueur) {
-			case 1 :
-			laCaseCochee.target.classList.add("joueur1");
-			break;
-			case 2 :
-			laCaseCochee.target.classList.add("joueur2");
-			break;
-			}
+	//alert(event.target.id); //<<<<ETAPE  2>>>>>
+
+	nombreDeCoups++; //On ajoute 1 au nombre de coups joués
+	
+/*on teste event.target.classList == "case" pour voir si la case cochée ne contient QUE "case" en class :
+	>>c'est le cas : on teste également de quel joueur c'est le tour (tourDuJoueur):
+		=> 1 : on ajoute "joueur1" aux class de la case cliquée.
+		=> 2 :on ajoute "joueur2" aux class de la case cliquée.
+	>>ce n'est pas le cas :
+		c'est qu'un joueur à déjà joué, on alerte donc le joueur. */
+		// <<<<ETAPE 6>>>>
+	
+	if (event.target.classList == "case" && tourDuJoueur == 1) {
+		event.target.classList.add("joueur1");
+	} else if (event.target.classList == "case" && tourDuJoueur == 2) {
+		event.target.classList.add("joueur2");
 	} else {
-		alert("Cette case à déjà été jouée, choisissez en une autre...");
+		alert('Cette case a déjà été jouée, merci de rejouer.');
+	};
+
+	/* le joueur a jouer on va tester les conditions de victoires */
+
+	conditionsDeVictoire();
+
+	/* si toutes les cases sont pleine on préviens puis on réinitialise au bout de 2 secondes*/
+
+	if (nombreDeCoups === 9) {
+		alert('Plus de coup possible, la partie va redémarrer');
+		setTimeout(function(){initialisationDeLaPartie()}, 2000);
+	};
+
+	/* on change de joueur <<<<ETAPE 3>>>> */
+
+	switch(tourDuJoueur){
+		case 1 :
+		tourDuJoueur = 2 ;
+		break ;
+		case 2 :
+		tourDuJoueur = 1 ;
+		break ;
+	};
+
+	/* On aurrait pu faire avec if : */
+	// if (tourDuJoueur === 1){
+	// 	tourDuJoueur = 2;
+	// } else { tourDuJoueur = 1; };
+
+};
+//FIN--Cocher une case--
+
+//DEBUT--Conditions de victoire--
+function conditionsDeVictoire() {
+
+	var alignements = [ 
+	// Je stocke dans un tableau des tableaux de séries de 3 cases devant être testées pour déclarer une victoire
+	// Les Lignes
+	[$casel1c1, $casel1c2, $casel1c3],
+	[$casel2c1, $casel2c2, $casel2c3],
+	[$casel3c1, $casel3c2, $casel3c3],
+	// Les Colonnes
+	[$casel1c1, $casel2c1, $casel3c1],
+	[$casel1c1, $casel2c2, $casel3c2],
+	[$casel1c3, $casel2c3, $casel3c3],
+	// Les diagonales
+	[$casel1c1, $casel2c2, $casel3c3],
+	[$casel1c3, $casel2c2, $casel3c1]
+	]
+
+
+	//on teste chaque serie de trois cases dans le tabeau 'alignement' via le 'for':
+	//Parmis les 3 cases, contiennnt elle toutes les class "joueur1" ou "joueur2"
+	//<<<<ETAPE 5>>>>
+
+
+	for ( i = 0 ; alignements.length > i ; i++ ) 
+	{
+		if (
+	alignements[i][0].classList.contains("joueur1") === true &&
+	alignements[i][1].classList.contains("joueur1") === true &&
+	alignements[i][2].classList.contains("joueur1") === true 
+
+	||
+
+	alignements[i][0].classList.contains("joueur2") === true &&
+	alignements[i][1].classList.contains("joueur2") === true &&
+	alignements[i][2].classList.contains("joueur2") === true
+		)
+	//si un des enssemble de 3 conditions est vrais alors : on indique que
+	//la partie est finie, on relance après 2 secondes
+		{
+		alert('Le joueur ' + tourDuJoueur + ' gagne !\nLa partie va recommencer');
+		setTimeout(function(){initialisationDeLaPartie()}, 2000)
+		}
 	}
 }
-
+//FIN--Conditions de victoire--
 
 /////////////
 // Action! //
 /////////////
 
 initialisationDeLaPartie(); //initialiser la partie
+$zoneDeJeu.addEventListener('click', cocherUneCase); //Action au clic sur la zone de jeu
+$btnRestart.addEventListener('click', initialisationDeLaPartie); //Action au clic sur le bouton "relancer" : Lance le script d'initialisation <<<<ETAPE 4>>>>
 
-$zoneDeJeu.addEventListener('click', function(laCaseCochee){cocherUneCase(laCaseCochee)}); //Action au clic

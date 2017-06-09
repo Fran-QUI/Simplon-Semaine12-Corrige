@@ -1,6 +1,7 @@
 html {
 	background-color: #88f;
 	text-align: center;
+	align-items: center;
 }
 
 #jeu {
@@ -24,6 +25,20 @@ html {
 	border-radius: 0.8em;
 }
 
+#btnRestart {
+	background-color: #626;
+	width : 12em;
+	height: 3em;
+	margin: 0.2em;
+	border : 0.2em solid #999;
+	border-radius: 0.8em;
+	margin: auto;
+	margin-top: 1.2em;
+	text-align: center;
+	font-family: fantasy;
+	color: #f50;
+}
+
 /* (OPTIONNEL) Pour mettre en évidence la case sous le curseur je met un effet au passage de la souris */
 .case:hover{
 	border-color: #FFF;
@@ -31,6 +46,7 @@ html {
 
 
 /* les classes joueur1 et joueur2 permettent de visualiser quel joueur a jouer dans la case */
+/* Elles seront ajoutées ou supprimées dans le script */
 #jeu .joueur1 {
 	background-color: #f00;
 }
