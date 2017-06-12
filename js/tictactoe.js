@@ -32,6 +32,7 @@ var toutesLesCases = [	$casel1c1, $casel1c2, $casel1c3,
 
 /*Autre Variables*/
 
+//Je déclare ces varible, mais je ne leur donnerais une valeur qu'au moment de l'initialisation de la partie.
 var tourDuJoueur; //pour suivre le tour du joueur 1 ou 2 comme valeur numérique possible
 var nombreDeCoups; //pour suivre les tours de l'ensemble des joueurs, valeur numérique de 0 à 9 (il y a 9 cases)
 
@@ -63,20 +64,20 @@ function cocherUneCase(event) {
 	
 	//alert(event.target.id); //<<<<ETAPE  2>>>>>
 
-	nombreDeCoups++; //On ajoute 1 au nombre de coups joués
-	
 /*on teste event.target.classList == "case" pour voir si la case cochée ne contient QUE "case" en class :
 	>>c'est le cas : on teste également de quel joueur c'est le tour (tourDuJoueur):
 		=> 1 : on ajoute "joueur1" aux class de la case cliquée.
-		=> 2 :on ajoute "joueur2" aux class de la case cliquée.
+		=> 2 : on ajoute "joueur2" aux class de la case cliquée.
 	>>ce n'est pas le cas :
 		c'est qu'un joueur à déjà joué, on alerte donc le joueur. */
 		// <<<<ETAPE 6>>>>
 	
 	if (event.target.classList == "case" && tourDuJoueur == 1) {
 		event.target.classList.add("joueur1");
+		nombreDeCoups++; //On ajoute 1 au nombre de coups joués
 	} else if (event.target.classList == "case" && tourDuJoueur == 2) {
 		event.target.classList.add("joueur2");
+		nombreDeCoups++; //On ajoute 1 au nombre de coups joués
 	} else {
 		alert('Cette case a déjà été jouée, merci de rejouer.');
 	};
@@ -127,11 +128,12 @@ function conditionsDeVictoire() {
 	// Les diagonales
 	[$casel1c1, $casel2c2, $casel3c3],
 	[$casel1c3, $casel2c2, $casel3c1]
-	]
+	];
 
 
 	//on teste chaque serie de trois cases dans le tabeau 'alignement' via le 'for':
-	//Parmis les 3 cases, contiennnt elle toutes les class "joueur1" ou "joueur2"
+	//Parmis les 3 cases, contiennent-elles toutes les class "joueur1" ou "joueur2"
+	//'=== true' n'est pas obligatoire
 	//<<<<ETAPE 5>>>>
 
 
@@ -153,9 +155,9 @@ function conditionsDeVictoire() {
 		{
 		alert('Le joueur ' + tourDuJoueur + ' gagne !\nLa partie va recommencer');
 		setTimeout(function(){initialisationDeLaPartie()}, 2000)
-		}
-	}
-}
+		};
+	};
+};
 //FIN--Conditions de victoire--
 
 /////////////
