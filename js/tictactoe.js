@@ -91,26 +91,13 @@ function cocherUneCase(event) {
 	if (nombreDeCoups === 9) {
 		alert('Plus de coup possible, la partie va redémarrer');
 		setTimeout(function(){initialisationDeLaPartie()}, 2000);
+	} else {
+		changeDeJoueur();	// on change de joueur <<<<ETAPE 3>>>>
 	};
-
-	/* on change de joueur <<<<ETAPE 3>>>> */
-
-	switch(tourDuJoueur){
-		case 1 :
-		tourDuJoueur = 2 ;
-		break ;
-		case 2 :
-		tourDuJoueur = 1 ;
-		break ;
-	};
-
-	/* On aurrait pu faire avec if : */
-	// if (tourDuJoueur === 1){
-	// 	tourDuJoueur = 2;
-	// } else { tourDuJoueur = 1; };
-
 };
 //FIN--Cocher une case--
+
+
 
 //DEBUT--Conditions de victoire--
 function conditionsDeVictoire() {
@@ -123,7 +110,7 @@ function conditionsDeVictoire() {
 	[$casel3c1, $casel3c2, $casel3c3],
 	// Les Colonnes
 	[$casel1c1, $casel2c1, $casel3c1],
-	[$casel1c1, $casel2c2, $casel3c2],
+	[$casel1c2, $casel2c2, $casel3c2],
 	[$casel1c3, $casel2c3, $casel3c3],
 	// Les diagonales
 	[$casel1c1, $casel2c2, $casel3c3],
@@ -160,6 +147,23 @@ function conditionsDeVictoire() {
 };
 //FIN--Conditions de victoire--
 
+//DEBUT--change de Joueur--
+function changeDeJoueur(){
+	switch(tourDuJoueur){
+		case 1 :
+		tourDuJoueur = 2 ;
+		break ;
+		case 2 :
+		tourDuJoueur = 1 ;
+		break ;
+	};
+	/* On aurrait pu faire avec if : */
+	// if (tourDuJoueur === 1){
+	// 	tourDuJoueur = 2;
+	// } else { tourDuJoueur = 1; };
+};
+//FIN--change de Joueur--
+
 /////////////
 // Action! //
 /////////////
@@ -168,3 +172,12 @@ initialisationDeLaPartie(); //initialiser la partie
 $zoneDeJeu.addEventListener('click', cocherUneCase); //Action au clic sur la zone de jeu
 $btnRestart.addEventListener('click', initialisationDeLaPartie); //Action au clic sur le bouton "relancer" : Lance le script d'initialisation <<<<ETAPE 4>>>>
 
+///////////////////////////
+// On Aurrait pu ajouter //
+///////////////////////////
+
+// Compter les points
+// Personnaliser l'alertbox
+// Un indicateur pour indiquer le tour du joueur
+// Une IA
+// ...
